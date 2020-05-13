@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pdsu.project.dao.IsolationInformationMapper" >
+  <resultMap id="BaseResultMap" type="pdsu.project.domain.IsolationInformation" >
+    <id column="isolation_id" property="isolationId" jdbcType="INTEGER" />
+    <result column="isolation_hospital" property="isolationHospital" jdbcType="INTEGER" />
+    <result column="isolation_home" property="isolationHome" jdbcType="INTEGER" />
+    <result column="isolation_start" property="isolationStart" jdbcType="TIMESTAMP" />
+    <result column="isolation_end" property="isolationEnd" jdbcType="TIMESTAMP" />
+    <result column="report_id" property="reportId" jdbcType="INTEGER" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from isolation_information
+    where isolation_id = #{isolationId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="pdsu.project.domain.IsolationInformation" >
+    insert into isolation_information (isolation_id, isolation_hospital, isolation_home, 
+      isolation_start, isolation_end, report_id
+      )
+    values (null , #{isolationHospital,jdbcType=INTEGER}, #{isolationHome,jdbcType=INTEGER},
+      #{isolationStart,jdbcType=TIMESTAMP}, #{isolationEnd,jdbcType=TIMESTAMP}, #{reportId,jdbcType=INTEGER}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="pdsu.project.domain.IsolationInformation" >
+    update isolation_information
+    set isolation_hospital = #{isolationHospital,jdbcType=INTEGER},
+      isolation_home = #{isolationHome,jdbcType=INTEGER},
+      isolation_start = #{isolationStart,jdbcType=TIMESTAMP},
+      isolation_end = #{isolationEnd,jdbcType=TIMESTAMP},
+      report_id = #{reportId,jdbcType=INTEGER}
+    where isolation_id = #{isolationId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select isolation_id, isolation_hospital, isolation_home, isolation_start, isolation_end, 
+    report_id
+    from isolation_information
+    where isolation_id = #{isolationId,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select isolation_id, isolation_hospital, isolation_home, isolation_start, isolation_end, 
+    report_id
+    from isolation_information
+  </select>
+</mapper>

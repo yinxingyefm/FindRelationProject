@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pdsu.project.dao.PermissionInformationMapper" >
+  <resultMap id="BaseResultMap" type="pdsu.project.domain.PermissionInformation" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="department_id" property="departmentId" jdbcType="INTEGER" />
+    <result column="class_id" property="classId" jdbcType="INTEGER" />
+    <result column="dormtory_id" property="dormtoryId" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="grade_id" property="gradeId" jdbcType="INTEGER" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from permission_information
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="pdsu.project.domain.PermissionInformation" >
+    insert into permission_information (id, department_id, class_id, 
+      dormtory_id, user_id, grade_id
+      )
+    values (#{id,jdbcType=INTEGER}, #{departmentId,jdbcType=INTEGER}, #{classId,jdbcType=INTEGER}, 
+      #{dormtoryId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{gradeId,jdbcType=INTEGER}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="pdsu.project.domain.PermissionInformation" >
+    update permission_information
+    set department_id = #{departmentId,jdbcType=INTEGER},
+      class_id = #{classId,jdbcType=INTEGER},
+      dormtory_id = #{dormtoryId,jdbcType=INTEGER},
+      user_id = #{userId,jdbcType=INTEGER},
+      grade_id = #{gradeId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select id, department_id, class_id, dormtory_id, user_id, grade_id
+    from permission_information
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, department_id, class_id, dormtory_id, user_id, grade_id
+    from permission_information  where user_id = #{userId,jdbcType=INTEGER}
+  </select>
+    <!--通过userid查询权限信息-->
+  <select id="selectByUserId" resultType="pdsu.project.domain.PermissionInformation">
+
+select id, department_id, class_id, dormtory_id, user_id, grade_id
+    from permission_information
+    where user_id = #{id,jdbcType=INTEGER}
+
+
+    </select>
+
+  <!--/通过角色查询角色id-->
+  <select id="roleIdByRloe" resultType="java.lang.Integer">
+    select  role_id from  role_information where  role_name=#{role}
+  </select>
+
+
+
+  <select id="allClassIdByGradeAndDeptId" resultType="java.lang.Integer">
+       SELECT  DISTINCT class_id from permission_information
+       WHERE department_id =#{dept} and grade_id=#{gradeId}
+       AND !ISNULL(class_id)
+  </select>
+  <select id="allDorIdByGradeAndDeptIdAndClassId" resultType="java.lang.Integer">
+       SELECT  DISTINCT dormtory_id from permission_information
+       WHERE department_id =#{dept} and grade_id=#{gradeId}  and class_id=#{classId}
+       AND !ISNULL(dormtory_id)
+  </select>
+
+
+  <select id="findAllUserId" resultType="java.lang.Integer">
+       select user_id  from permission_information
+       <if test="dept!=null  &amp; dept!=&quot;&quot;">
+            and department_id =#{dept}
+       </if>
+      <if test="gradeId !=null  &amp; gradeId != &quot;&quot;">
+        and grade_id =#{gradeId}
+      </if>
+    <if test="gradeId ==null  &amp; gradeId == &quot;&quot;">
+               and ISNULL(grade_id)
+     </if>
+      <if test="classId !=null  &amp; classId != &quot;&quot;">
+      and class_id =#{classId}
+     </if>
+    <if test="classId ==null  &amp; classId == &quot;&quot;">
+           and ISNULL(grade_id)
+    </if>
+    <if test="dorId !=null  &amp; dorId != &quot;&quot;">
+      and dormtory_id =#{dorId}
+    </if>
+    <if test="dorId ==null  &amp; dorId == &quot;&quot;">
+      and ISNULL(dormtory_id)
+    </if>
+
+  </select>
+
+
+</mapper>

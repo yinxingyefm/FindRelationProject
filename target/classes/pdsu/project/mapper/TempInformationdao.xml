@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pdsu.project.dao.TempInformationdao" >
+
+    <!--查询当天早上正常学生或者老师的数量-->
+    <select id="selectNumInMorNormal" resultType="java.lang.Integer">
+        select count(*)  from  tempture_information  where  tempture_mor  &lt;   #{temp}
+        and  convert(tempture_date,DATETIME) like  concat ("%",#{now},"%") and type=#{type}
+    </select>
+
+    <!--查询当天早上不正常学生或者老师的数量-->
+    <select id="selectNumInMorUnNomal" resultType="java.lang.Integer">
+          select count(*)  from  tempture_information  where  tempture_mor   &gt; #{temp}
+        and  convert(tempture_date,DATETIME) like  concat ("%",#{now},"%") and type=#{type}
+    </select>
+
+    <!--统计学生或者老师中午正常人数-->
+    <select id="selectNumInLunNormal" resultType="java.lang.Integer">
+           select count(*)  from  tempture_information  where  tempture_lun  &lt;   #{temp}
+        and  convert(tempture_date,DATETIME) like  concat ("%",#{now},"%") and type=#{type}
+    </select>
+
+    <!--<!-统计学生或者老师中午不正常-&ndash;&gt;-->
+    <select id="selectNumInLunUnNomal" resultType="java.lang.Integer">
+           select count(*)  from  tempture_information  where  tempture_lun  &gt;   #{temp}
+        and  convert(tempture_date,DATETIME) like  concat ("%",#{now},"%") and type=#{type}
+    </select>
+
+    <!--统计学生或者老师晚上正常人数-->
+    <select id="selectNumInEveNormal" resultType="java.lang.Integer">
+         select count(*)  from  tempture_information  where  tempture_eve  &lt;   #{temp}
+        and  convert(tempture_date,DATETIME) like  concat ("%",#{now},"%") and type=#{type}
+    </select>
+
+    <!--查询晚上学生或者老师不正常的人数-->
+    <select id="selectNumInEveUnNomal" resultType="java.lang.Integer">
+           select count(*)  from  tempture_information  where  tempture_lun  &gt;   #{temp}
+        and  convert(tempture_date,DATETIME) like  concat ("%",#{now},"%") and type=#{type}
+    </select>
+
+    <select id="selectAllCountByStu" resultType="java.lang.Integer"   >
+         select count(id)
+    from tempture_information
+    where
+       !ISNULL(tempture_eve) AND !ISNULL(tempture_lun)
+    AND  !ISNULL(tempture_mor)
+    AND date(tempture_date) = curdate()  and  type =#{type}
+
+
+  </select>
+
+
+</mapper>

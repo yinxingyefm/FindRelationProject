@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pdsu.project.dao.TemptureInformationMapper" >
+  <resultMap id="BaseResultMap" type="pdsu.project.domain.TemptureInformation" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <id column="tempture_num" property="temptureNum" jdbcType="INTEGER" />
+    <result column="tempture_mor" property="temptureMor" jdbcType="REAL" />
+    <result column="tempture_lun" property="temptureLun" jdbcType="REAL" />
+    <result column="tempture_eve" property="temptureEve" jdbcType="REAL" />
+    <result column="tempture_date" property="temptureDate" jdbcType="TIMESTAMP" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="map" >
+    delete from tempture_information
+    where id = #{id,jdbcType=INTEGER}
+      and tempture_num = #{temptureNum,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="pdsu.project.domain.TemptureInformation" >
+    insert into tempture_information (id, tempture_num, tempture_mor, 
+      tempture_lun, tempture_eve, tempture_date, 
+      type)
+    values (#{id,jdbcType=INTEGER}, #{temptureNum,jdbcType=INTEGER}, #{temptureMor,jdbcType=REAL}, 
+      #{temptureLun,jdbcType=REAL}, #{temptureEve,jdbcType=REAL}, #{temptureDate,jdbcType=TIMESTAMP}, 
+      #{type,jdbcType=INTEGER})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="pdsu.project.domain.TemptureInformation" >
+    update tempture_information
+    set tempture_mor = #{temptureMor,jdbcType=REAL},
+      tempture_lun = #{temptureLun,jdbcType=REAL},
+      tempture_eve = #{temptureEve,jdbcType=REAL},
+      tempture_date = #{temptureDate,jdbcType=TIMESTAMP},
+      type = #{type,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+      and tempture_num = #{temptureNum,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    select id, tempture_num, tempture_mor, tempture_lun, tempture_eve, tempture_date, 
+    type
+    from tempture_information
+    where id = #{id,jdbcType=INTEGER}
+      and tempture_num = #{temptureNum,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+
+     select *
+    from tempture_information
+    where  convert(tempture_date,DATETIME) like  concat ("%",#{localDate},"%") and type=#{type}
+  </select>
+    <select id="count" resultType="java.lang.Integer">
+         select count(*)
+    from tempture_information
+    where  convert(tempture_date,DATETIME) like  concat ("%",#{localdate},"%") and type=#{type} and
+          tempture_num=#{num}
+    and
+    tempture_eve >#{temp} OR  tempture_lun >#{temp} OR tempture_eve > #{temp}
+    </select>
+
+  <!--查询正常数据-->
+  <select id="countNormal" resultType="java.lang.Integer">
+
+      select count(*)
+    from tempture_information
+    where  convert(tempture_date,DATETIME) like  concat ("%",#{localdate},"%") and type=#{type} and
+     tempture_num in( #{num})
+    and
+    tempture_eve &lt; #{temp} and  tempture_lun &lt; #{temp} and tempture_eve &lt; #{temp}
+
+  </select>
+
+  <!-- //根据时间查询所有的人数统计体温的人数-->
+  <select id="countNnll" resultType="java.lang.Integer">
+         select count(*)
+    from tempture_information
+    where  convert(tempture_date,DATETIME) like  concat ("%",#{localdate},"%") and type=#{type}
+
+
+  </select>
+  <!-- //查询正常的-->
+  <select id="countNormalAll" resultType="java.lang.Integer">
+      select count(*)
+    from tempture_information
+    where  convert(tempture_date,DATETIME) like  concat ("%",#{localdate},"%") and type=#{type}
+    and
+    tempture_eve &lt; #{temp} and  tempture_lun &lt; #{temp} and tempture_eve &lt; #{temp}
+  </select>
+     <!--通过学号或者工号查询温度信息-->
+  <select id="selectByNum" resultType="pdsu.project.domain.TemptureInformation">
+      select *
+    from tempture_information
+    where  convert(tempture_date,DATETIME) like  concat ("%",#{localDate},"%")  and    tempture_num=#{num}
+
+  </select>
+
+  <!--查询已经录入信息-->
+  <select id="selectCount" resultType="java.lang.Integer">
+    select count(*)
+    from tempture_information
+    where  convert(tempture_date,DATETIME) like  concat ("%",#{localDate},"%")  and    tempture_num in (#{num})
+    and !isnull(tempture_eve) AND !ISNULL(tempture_lun)
+    AND  !ISNULL(tempture_mor)
+  </select>
+  <!--不正常的信息-->
+  <select id="countNnllByNum" resultType="java.lang.Integer">
+   select count(*)
+    from tempture_information
+    where  convert(tempture_date,DATETIME) like  concat ("%",#{localdate},"%") and type=#{type} and
+    tempture_eve >#{temp} OR  tempture_lun >#{temp} OR tempture_eve > #{temp}
+ and tempture_num in  concat ("(",#{list},")")
+  </select>
+
+  <!--正常的信息-->
+  <select id="countNormalAllByNum" resultType="java.lang.Integer"   >
+      select count(*)
+    from tempture_information
+    where  convert(tempture_date,DATETIME) like  concat ("%",#{localdate},"%") and type=#{type}
+    and
+    tempture_eve &lt; #{temp} OR  tempture_lun &lt; #{temp} OR tempture_eve &lt; #{temp}
+   and tempture_num in  concat ("(",#{list},")")
+
+  </select>
+    <select id="slectAllUnRecord" resultMap="BaseResultMap">
+       select *
+    from tempture_information
+    where  convert(tempture_date,DATETIME) like  concat ("%",#{localdate},"%") and type=#{type}
+     and ISNULL(tempture_mor)
+        and
+        tempture_num IN
+        <foreach collection="list" item="id" index="index"
+        open="(" close=")" separator=",">
+        ${id}
+        </foreach>
+    </select>
+  <select id="slectAllUnRecordLun" resultType="pdsu.project.domain.TemptureInformation">
+     select *
+    from tempture_information
+    where  convert(tempture_date,DATETIME) like  concat ("%",#{localdate},"%") and type=#{type}
+     and ISNULL(tempture_lun)
+      and
+      tempture_num IN
+      <foreach collection="list" item="id" index="index"
+      open="(" close=")" separator=",">
+      ${id}
+      </foreach>
+  </select>
+
+
+  <select id="slectAllUnRecordEve" resultType="pdsu.project.domain.TemptureInformation">
+
+     select *
+    from tempture_information
+    where  convert(tempture_date,DATETIME) like  concat ("%",#{localdate},"%") and type=#{type}
+     and ISNULL(tempture_eve)
+      and
+      tempture_num IN
+      <foreach collection="list" item="id" index="index"
+      open="(" close=")" separator=",">
+      ${id}
+      </foreach>
+  </select>
+    <select id="slectAllRecord1" resultType="pdsu.project.domain.TemptureInformation">
+
+         select *
+    from tempture_information
+    where  convert(tempture_date,DATETIME) like  concat ("%",#{localdate},"%") and type=#{type}
+
+
+    </select>
+    <select id="selectByNum1" resultType="pdsu.project.domain.TemptureInformation">
+SELECT
+	*
+FROM
+	tempture_information
+WHERE
+CONVERT (tempture_date, DATETIME) like concat("%",#{localDate},"%")AND 
+	tempture_num =#{temptureNum}
+    </select>
+
+
+</mapper>

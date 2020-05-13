@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pdsu.project.dao.ReportInformationMapper" >
+  <resultMap id="BaseResultMap" type="pdsu.project.domain.ReportInformation" extends="smallResult" >
+
+    <result column="health" property="health" jdbcType="VARCHAR" />
+    <result column="now_detailAddress" property="nowDetailaddress" jdbcType="VARCHAR" />
+    <result column="now_address" property="nowAddress" jdbcType="INTEGER" />
+    <result column="if_dermine" property="ifDermine" jdbcType="INTEGER" />
+    <result column="out" property="out" jdbcType="INTEGER" />
+    <result column="teacher_pds" property="teacherPds" jdbcType="INTEGER" />
+    <result column="isolation" property="isolation" jdbcType="INTEGER" />
+    <result column=" inpatient" property="inpatient" jdbcType="INTEGER" />
+    <result column="serverly_area" property="serverlyArea" jdbcType="INTEGER" />
+    <result column="family_severely_area" property="familySeverelyArea" jdbcType="INTEGER" />
+    <result column="student_backSchool" property="studentBackschool" jdbcType="INTEGER" />
+    <result column="area_disease" property="areaDisease" jdbcType="INTEGER" />
+
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="others" property="others" jdbcType="VARCHAR" />
+  </resultMap>
+
+<!--查询信息-->
+  <resultMap id="smallResult" type="pdsu.project.domain.ReportInformation">
+    <id column="report_id" property="reportId" jdbcType="INTEGER" />
+    <result column="temperature" property="temperature" jdbcType="DOUBLE" />
+    <result column="report_time" property="reportTime" jdbcType="DATE" />
+    <result column="number" property="number" jdbcType="VARCHAR" />
+  </resultMap>
+
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+     delete from report_information
+     where report_id = #{reportId,jdbcType=INTEGER}
+  </delete>
+
+
+  <insert id="insert" parameterType="pdsu.project.domain.ReportInformation" useGeneratedKeys="true" keyProperty="reportId">
+    insert into report_information
+    values (null , #{reportTime,jdbcType=DATE}, #{temperature,jdbcType=DOUBLE},
+      #{health,jdbcType=VARCHAR}, #{nowDetailaddress,jdbcType=VARCHAR}, #{nowAddress,jdbcType=INTEGER}, 
+      #{ifDermine,jdbcType=INTEGER}, #{out,jdbcType=INTEGER}, #{teacherPds,jdbcType=INTEGER}, 
+      #{isolation,jdbcType=INTEGER}, #{inpatient,jdbcType=INTEGER}, #{serverlyArea,jdbcType=INTEGER}, 
+      #{familySeverelyArea,jdbcType=INTEGER}, #{studentBackschool,jdbcType=INTEGER}, 
+      #{areaDisease,jdbcType=INTEGER}, #{number,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, 
+      #{others,jdbcType=VARCHAR})
+  </insert>
+
+  <update id="updateByPrimaryKey" parameterType="pdsu.project.domain.ReportInformation" >
+    update report_information
+    set report_time = #{reportTime,jdbcType=DATE},
+      temperature = #{temperature,jdbcType=DOUBLE},
+      health = #{health,jdbcType=VARCHAR},
+      now_detailAddress = #{nowDetailaddress,jdbcType=VARCHAR},
+      now_address = #{nowAddress,jdbcType=INTEGER},
+      if_dermine = #{ifDermine,jdbcType=INTEGER},
+      out = #{out,jdbcType=INTEGER},
+      teacher_pds = #{teacherPds,jdbcType=INTEGER},
+      isolation = #{isolation,jdbcType=INTEGER},
+      ` inpatient` = #{inpatient,jdbcType=INTEGER},
+      serverly_area = #{serverlyArea,jdbcType=INTEGER},
+      family_severely_area = #{familySeverelyArea,jdbcType=INTEGER},
+      student_backSchool = #{studentBackschool,jdbcType=INTEGER},
+      area_disease = #{areaDisease,jdbcType=INTEGER},
+      number = #{number,jdbcType=VARCHAR},
+      type = #{type,jdbcType=INTEGER},
+      others = #{others,jdbcType=VARCHAR}
+    where report_id = #{reportId,jdbcType=INTEGER}
+  </update>
+
+  <!--根据学号或者工号查询报备信息-->
+
+  <select id="selectAll" resultMap="smallResult" >
+    select  report_id,report_time , temperature,number from report_information  where number=#{number}
+    and `out`=0  and type=#{type}
+  </select>
+
+  <!--查询外出情况-->
+  <select id="selectByNum" resultType="pdsu.project.domain.ReportInformation">
+    select * from report_information  where number=#{num}
+  </select>
+    <select id="selectAllByTime" resultType="pdsu.project.domain.ReportInformation">
+         select * from report_information  where convert(report_time,DATETIME) like  concat ("%",#{localDate},"%")
+         and type= #{type}  and  `out` = 0
+    </select>
+
+  <select id="selesctByTime" resultType="java.lang.Integer">
+      select  count(*)  from report_information  where   number=#{studentNumber}  and report_time=#{date}
+   </select>
+    <select id="selectByNumAndToday" resultType="pdsu.project.domain.ReportInformation">
+
+        select * from report_information  where number=#{studentNumber} and  convert(report_time,DATETIME) like  concat ("%",#{now},"%")
+    </select>
+
+</mapper>

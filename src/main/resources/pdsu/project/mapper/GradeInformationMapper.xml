@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pdsu.project.dao.GradeInformationMapper" >
+  <resultMap id="BaseResultMap" type="pdsu.project.domain.GradeInformation" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="grade_name" property="gradeName" jdbcType="VARCHAR" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from grade_information
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="pdsu.project.domain.GradeInformation" >
+    insert into grade_information (id, grade_name)
+    values (#{id,jdbcType=INTEGER}, #{gradeName,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="pdsu.project.domain.GradeInformation" >
+    update grade_information
+    set grade_name = #{gradeName,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select id, grade_name
+    from grade_information
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, grade_name
+    from grade_information
+  </select>
+    <select id="selectByGradeName" resultType="java.lang.Integer">
+       select id
+    from grade_information  where grade_name=#{name}
+    </select>
+</mapper>

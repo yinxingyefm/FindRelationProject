@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pdsu.project.dao.UserInformationMapper" >
+  <resultMap id="BaseResultMap" type="pdsu.project.domain.UserInformation" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="student_id" property="studentId" jdbcType="INTEGER" />
+    <result column="teacher_id" property="teacherId" jdbcType="INTEGER" />
+    <result column="role_id" property="roleId" jdbcType="INTEGER" />
+    <result column="descb" property="descb" jdbcType="VARCHAR" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from user_information
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="pdsu.project.domain.UserInformation"  useGeneratedKeys="true" keyProperty="id">
+    insert into user_information (id, student_id, teacher_id, 
+      role_id, descb)
+    values (#{id,jdbcType=INTEGER}, #{studentId,jdbcType=INTEGER}, #{teacherId,jdbcType=INTEGER}, 
+      #{roleId,jdbcType=INTEGER}, #{descb,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="pdsu.project.domain.UserInformation" >
+    update user_information
+    set student_id = #{studentId,jdbcType=INTEGER},
+      teacher_id = #{teacherId,jdbcType=INTEGER},
+      role_id = #{roleId,jdbcType=INTEGER},
+      descb = #{descb,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select id, student_id, teacher_id, role_id, descb
+    from user_information
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, student_id, teacher_id, role_id, descb
+    from user_information
+  </select>
+  <select id="selectStudentByKey" resultType="pdsu.project.domain.UserInformation">
+     select id, student_id, teacher_id, role_id, descb
+    from user_information
+    where student_id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectTeacherByKey" resultType="pdsu.project.domain.UserInformation">
+         select id, student_id, teacher_id, role_id, descb
+    from user_information
+    where teacher_id = #{id,jdbcType=INTEGER}
+  </select>
+    <select id="selectIfo" resultType="pdsu.project.domain.UserInformation">
+
+        select id, student_id, teacher_id, role_id, descb
+    from user_information
+    where descb = #{departmentName}
+    </select>
+
+
+</mapper>

@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pdsu.project.dao.StudentInformationMapper" >
+    <resultMap id="BaseResultMap" type="pdsu.project.domain.StudentInformation" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="student_number" property="studentNumber" jdbcType="VARCHAR" />
+        <result column="student_name" property="studentName" jdbcType="VARCHAR" />
+        <result column="student_dormitory" property="studentDormitory" jdbcType="INTEGER" />
+        <result column="student_sex" property="studentSex" jdbcType="INTEGER" />
+        <result column="student_phone" property="studentPhone" jdbcType="VARCHAR" />
+        <result column="student_contact_phone" property="studentContactPhone" jdbcType="VARCHAR" />
+        <result column="student_permanent_address" property="studentPermanentAddress" jdbcType="INTEGER" />
+        <result column="student_detail_perAddress" property="studentDetailPeraddress" jdbcType="VARCHAR" />
+        <result column="student_census_address" property="studentCensusAddress" jdbcType="INTEGER" />
+        <result column="student_contact_name" property="studentContactName" jdbcType="VARCHAR" />
+        <result column="student_department" property="studentDepartment" jdbcType="INTEGER" />
+        <result column="student_password" property="studentPassword" jdbcType="VARCHAR" />
+        <result column="grade_id" property="gradeId" jdbcType="INTEGER" />
+        <result column="class_id" property="classId" jdbcType="INTEGER" />
+    </resultMap>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from student_information
+    where student_number = #{studentNumber,jdbcType=VARCHAR}
+  </delete>
+    <insert id="insert" parameterType="pdsu.project.domain.StudentInformation" useGeneratedKeys="true"  keyProperty="id" >
+    insert into student_information ( student_number, student_name,
+      student_dormitory, student_sex, student_phone,
+      student_contact_phone, student_permanent_address,
+      student_detail_perAddress, student_census_address,
+      student_contact_name, student_department,
+      student_password, grade_id, class_id
+      )
+    values ( #{studentNumber,jdbcType=VARCHAR}, #{studentName,jdbcType=VARCHAR},
+      #{studentDormitory,jdbcType=INTEGER}, #{studentSex,jdbcType=INTEGER}, #{studentPhone,jdbcType=VARCHAR},
+      #{studentContactPhone,jdbcType=VARCHAR}, #{studentPermanentAddress,jdbcType=INTEGER},
+      #{studentDetailPeraddress,jdbcType=VARCHAR}, #{studentCensusAddress,jdbcType=INTEGER},
+      #{studentContactName,jdbcType=VARCHAR}, #{studentDepartment,jdbcType=INTEGER},
+      #{studentPassword,jdbcType=VARCHAR}, #{gradeId,jdbcType=INTEGER}, #{classId,jdbcType=INTEGER}
+      )
+  </insert>
+
+  <!--更新学生信息-->
+  <update id="updateByPrimaryKey" parameterType="pdsu.project.domain.StudentInformation" >
+    update student_information
+    set student_name = #{studentName,jdbcType=VARCHAR},
+      student_dormitory = #{studentDormitory,jdbcType=INTEGER},
+      student_sex = #{studentSex,jdbcType=INTEGER},
+      student_phone = #{studentPhone,jdbcType=VARCHAR},
+      student_contact_phone = #{studentContactPhone,jdbcType=VARCHAR},
+      student_permanent_address = #{studentPermanentAddress,jdbcType=INTEGER},
+      student_detail_perAddress = #{studentDetailPeraddress,jdbcType=VARCHAR},
+      student_census_address = #{studentCensusAddress,jdbcType=INTEGER},
+      student_contact_name = #{studentContactName,jdbcType=VARCHAR},
+      student_department = #{studentDepartment,jdbcType=INTEGER},
+      student_password = #{studentPassword,jdbcType=VARCHAR}
+    where student_number = #{studentNumber,jdbcType=VARCHAR}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select *
+    from student_information
+    where student_number = #{studentNum} and student_password=#{password}
+  </select>
+
+  <!--根据班级id查询所拥有的学生-->
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select *
+    from student_information  where class_id=#{classId}
+     order by id asc   limit #{page},#{pagesize}
+
+  </select>
+
+  <!--&lt;!&ndash;根据班级名查询对应的id&ndash;&gt;-->
+    <!--<select id="selectClassIdByClassName" resultType="java.lang.Integer">-->
+      <!--select department_id  from  department_information where department_name=#{className}-->
+    <!--</select>-->
+
+
+  <select id="selectByDorNum" resultMap="BaseResultMap">
+     select    *   from student_information  where student_dormitory=#{dormitoryNum}
+     order by id desc
+  </select>
+  <!--根据学号查询学生信息-->
+    <select id="selectByNum" resultMap="BaseResultMap">
+
+       select *
+    from student_information
+    where student_number = #{studentNum}
+
+    </select>
+  <select id="selectById" resultMap="BaseResultMap">
+     select *
+    from student_information
+    where  id=#{id}
+  </select>
+    <select id="selectAllStudent" resultMap="BaseResultMap">
+
+ select *
+    from student_information
+    order by id asc
+
+    </select>
+  <select id="telByStudentNum" resultType="java.lang.String">
+    select  student_contact_phone
+    from student_information   where  student_number=#{number}
+
+
+  </select>
+  <select id="selectAllStudentNumByDeptId" resultType="java.lang.String">
+    select  student_number
+    from student_information   where  student_department=#{deptid}
+  </select>
+
+  <select id="selectAllStudentNumByDeptIdByGrade" resultType="java.lang.String">
+    select  student_number
+    from student_information   where  student_department=#{deptid}
+    and  grade_id=#{gradeId}
+  </select>
+  <select id="selectAllStudentNumByDeptIdByGradeAndClassId" resultType="java.lang.String">
+
+    select  student_number
+    from student_information   where  student_department=#{deptid}
+    and  grade_id=#{gradeId}  and class_id=#{classId}
+  </select>
+  <select id="roleName" resultType="java.lang.String">
+    select  role_name
+    from  role_information  where role_id=#{id}
+  </select>
+
+  <select id="selectAllStudentByDeptIdByGrade" resultType="java.lang.String" >
+
+    select  student_number
+    from student_information   where  student_department=#{deptid}
+    and  grade_id=#{gradeId}
+  </select>
+  <select id="selectAllStudentNumByDeptIdByGAndClassId" resultType="java.lang.String">
+      select  student_number
+    from student_information   where  student_department=#{deptid}
+    and  class_id=#{classId}
+  </select>
+    <select id="selectAllStudentNumByDor" resultType="java.lang.String">
+
+          select  student_number
+    from student_information   where  student_dormitory=#{dor}
+
+
+    </select>
+
+    <!--查询所有的学号-->
+    <select id="allStudentNum" resultType="java.lang.String">
+          select  student_number
+    from student_information
+
+    </select>
+    <select id="selectAllStudentByPage" resultType="pdsu.project.domain.StudentInformation">
+
+          select *
+    from student_information   order by id asc     limit #{page},#{pageSize}
+
+    </select>
+    <select id="count" resultType="java.lang.Integer">
+        select  count(*) from  student_information
+    </select>
+    <select id="selectAllClassId" resultType="java.lang.Integer">
+        SELECT DISTINCT class_id
+FROM student_information
+WHERE student_department=#{dept}
+    </select>
+    <select id="selectCount" resultType="java.lang.Integer">
+
+        select  count(*) from student_information where class_id=#{classId}
+    </select>
+
+
+</mapper>

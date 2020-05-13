@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pdsu.project.dao.BackschoolInformationMapper" >
+  <resultMap id="BaseResultMap" type="pdsu.project.domain.BackschoolInformation" >
+    <id column="backSchool_id" property="backschoolId" jdbcType="INTEGER" />
+    <result column="backSchool_time" property="backschoolTime" jdbcType="TIMESTAMP" />
+    <result column="backSchool_vehicle" property="backschoolVehicle" jdbcType="VARCHAR" />
+    <result column="report_id" property="reportId" jdbcType="INTEGER" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from backschool_information
+    where backSchool_id = #{backschoolId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="pdsu.project.domain.BackschoolInformation" useGeneratedKeys="true"  keyProperty="backschoolId">
+    insert into backschool_information (backSchool_id, backSchool_time, backSchool_vehicle, 
+      report_id)
+    values (null, #{backschoolTime,jdbcType=TIMESTAMP}, #{backschoolVehicle,jdbcType=VARCHAR},
+      #{reportId,jdbcType=INTEGER})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="pdsu.project.domain.BackschoolInformation" >
+    update backschool_information
+    set backSchool_time = #{backschoolTime,jdbcType=TIMESTAMP},
+      backSchool_vehicle = #{backschoolVehicle,jdbcType=VARCHAR},
+      report_id = #{reportId,jdbcType=INTEGER}
+    where backSchool_id = #{backschoolId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select backSchool_id, backSchool_time, backSchool_vehicle, report_id
+    from backschool_information
+    where backSchool_id = #{backschoolId,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select backSchool_id, backSchool_time, backSchool_vehicle, report_id
+    from backschool_information
+  </select>
+</mapper>

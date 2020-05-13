@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pdsu.project.dao.HealthInformationMapper" >
+  <resultMap id="BaseResultMap" type="pdsu.project.domain.HealthInformation" >
+    <id column="health_id" property="healthId" jdbcType="INTEGER" />
+    <result column="condition" property="condition" jdbcType="VARCHAR" />
+    <result column="report_id" property="reportId" jdbcType="INTEGER" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from health_information
+    where health_id = #{healthId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="pdsu.project.domain.HealthInformation" >
+    insert into health_information
+    values (null , #{condition,jdbcType=VARCHAR}, #{reportId,jdbcType=INTEGER}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="pdsu.project.domain.HealthInformation" >
+    update health_information
+    set condition = #{condition,jdbcType=VARCHAR},
+      report_id = #{reportId,jdbcType=INTEGER}
+    where health_id = #{healthId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select health_id, condition, report_id
+    from health_information
+    where health_id = #{healthId,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select health_id, condition, report_id
+    from health_information
+  </select>
+</mapper>

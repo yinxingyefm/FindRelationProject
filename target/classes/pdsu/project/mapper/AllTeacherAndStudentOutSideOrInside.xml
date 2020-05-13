@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pdsu.project.dao.AllTeacherAndStudentOutSideOrInSideDao" >
+
+
+    <!--查询所有学生当天外出情况时间的-->
+    <select id="outsideStudentNum" resultType="java.lang.Integer">
+         select COUNT(*) from report_information where convert(report_time,DATETIME) like concat ("%",#{date},"%") and `out`=0 AND type=#{type}
+    </select>
+    <!--  查询所有学生当天未外出的数量-->
+    <select id="insideStudentNum" resultType="java.lang.Integer">
+         select COUNT(*) from report_information where convert(report_time,DATETIME) like  concat ("%",#{date},"%") and `out`=1 AND type=#{type}
+    </select>
+</mapper>

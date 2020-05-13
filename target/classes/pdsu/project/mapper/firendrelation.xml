@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pdsu.project.dao.FirendRelationMapper" >
+  <resultMap id="BaseResultMap" type="pdsu.project.domain.FirendRelation" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="per_num" property="per_num" jdbcType="VARCHAR" />
+    <result column="fir_num" property="fir_num" jdbcType="VARCHAR" />
+  </resultMap>
+  <select id="findChild" resultMap="BaseResultMap" parameterType="java.lang.String" >
+   SELECT * from friendrelationtest WHERE per_num=#{parnum,jdbcType=VARCHAR}
+  </select>
+
+  <select id="findFriendId" resultType="java.lang.String">
+     SELECT fir_num from friendrelationtest WHERE per_num=#{parnum,jdbcType=VARCHAR}
+  </select>
+  <select id="SingGo" resultType="java.lang.String">
+    SELECT fir_num from friendrelationtest where per_num=#{num}  AND fir_num not in
+    <foreach collection="list" item="id" index="index"
+             open="(" close=")" separator=",">
+      ${id}
+    </foreach>
+  </select>
+
+
+
+</mapper>

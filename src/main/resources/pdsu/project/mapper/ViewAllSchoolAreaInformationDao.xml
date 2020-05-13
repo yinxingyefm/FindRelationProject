@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pdsu.project.dao.ViewAllSchoolAreaInformationDao" >
+
+    <!--根据城市Id查询城市或者省市/区信息-->
+    <select id="CityNameByCityId" resultType="java.lang.String">
+        select  city_name from area_data where code_id=#{CityId}
+    </select>
+    <!--通过城市id查询是否含有下一级子节点-->
+    <select id="CityIdHasChildNum" resultType="java.lang.Integer">
+         select  code_id from area_data where parent_id=#{CityId}
+    </select>
+
+    <!--通过城市id和当天日期查询当天老师在某个地区的人数变化状况-->
+    <select id="selectTeacherNumByCityId" resultType="java.lang.Integer">
+      select  COUNT(*) from report_information where type=0 AND convert(report_time,DATETIME) like  concat ("%",#{now},"%")   AND  now_address LIKE concat(#{cityId},"%")
+    </select>
+    <!--通过城市id和当天日期查询当天学生在某个地区的人数变化状况-->
+    <select id="selectStudentNumByCityId" resultType="java.lang.Integer">
+         select  COUNT(*) from report_information where type=1 AND convert(report_time,DATETIME) like  concat ("%",#{now},"%")   AND  now_address LIKE concat(#{cityId},"%")
+    </select>
+
+    <!--通过城市id和当天日期查询当天学生和老师在某个地区的人数变化状况-->
+    <select id="selectStudentNumAndTeacherNumNumByCityId" resultType="java.lang.Integer">
+           select COUNT(*) from report_information where convert(report_time,DATETIME) like  concat ("%",#{now},"%")   AND  now_address LIKE concat(#{cityId},"%")
+    </select>
+
+</mapper>

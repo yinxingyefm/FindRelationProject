@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pdsu.project.dao.FamilyserverInformationMapper" >
+  <resultMap id="BaseResultMap" type="pdsu.project.domain.FamilyserverInformation" >
+    <id column="famServer_id" property="famserverId" jdbcType="INTEGER" />
+    <result column="famServer_time" property="famserverTime" jdbcType="TIMESTAMP" />
+    <result column="city" property="city" jdbcType="INTEGER" />
+    <result column="report_id" property="reportId" jdbcType="INTEGER" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from familyserver_information
+    where famServer_id = #{famserverId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="pdsu.project.domain.FamilyserverInformation" >
+    insert into familyserver_information (famServer_id, famServer_time, city, 
+      report_id)
+    values (null , #{famserverTime,jdbcType=TIMESTAMP}, #{city,jdbcType=INTEGER},
+      #{reportId,jdbcType=INTEGER})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="pdsu.project.domain.FamilyserverInformation" >
+    update familyserver_information
+    set famServer_time = #{famserverTime,jdbcType=TIMESTAMP},
+      city = #{city,jdbcType=INTEGER},
+      report_id = #{reportId,jdbcType=INTEGER}
+    where famServer_id = #{famserverId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select famServer_id, famServer_time, city, report_id
+    from familyserver_information
+    where famServer_id = #{famserverId,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select famServer_id, famServer_time, city, report_id
+    from familyserver_information
+  </select>
+</mapper>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pdsu.project.dao.TeacherInformationMapper" >
+  <resultMap id="BaseResultMap" type="pdsu.project.domain.TeacherInformation" >
+    <id column="id" property="id"  />
+    <result column="teacher_number" property="teacherNumber" jdbcType="VARCHAR" />
+    <result column="teacher_name" property="teacherName" jdbcType="VARCHAR" />
+    <result column="teacher_phone" property="teacherPhone" jdbcType="VARCHAR" />
+    <result column="teacher_contact_phone" property="teacherContactPhone" jdbcType="VARCHAR" />
+    <result column="teacher_permanent_address" property="teacherPermanentAddress" jdbcType="INTEGER" />
+    <result column="teacher_detail_perAddress" property="teacherDetailPeraddress" jdbcType="VARCHAR" />
+    <result column="teacher_contact_name" property="teacherContactName" jdbcType="VARCHAR" />
+    <result column="teacher_sex" property="teacherSex" jdbcType="INTEGER" />
+    <result column="teacher_password" property="teacherPassword" jdbcType="VARCHAR" />
+    <result column="department_id" property="departmentId" jdbcType="INTEGER" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from teacher_information
+    where teacher_number = #{teacherNumber,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="pdsu.project.domain.TeacherInformation" useGeneratedKeys="true" keyProperty="id">
+    insert into teacher_information (teacher_number, teacher_name, teacher_phone, 
+      teacher_contact_phone, teacher_permanent_address, 
+      teacher_detail_perAddress, teacher_contact_name, 
+      teacher_sex, teacher_password, department_id
+      )
+    values (#{teacherNumber,jdbcType=VARCHAR}, #{teacherName,jdbcType=VARCHAR}, #{teacherPhone,jdbcType=VARCHAR}, 
+      #{teacherContactPhone,jdbcType=VARCHAR}, #{teacherPermanentAddress,jdbcType=INTEGER}, 
+      #{teacherDetailPeraddress,jdbcType=VARCHAR}, #{teacherContactName,jdbcType=VARCHAR}, 
+      #{teacherSex,jdbcType=INTEGER}, #{teacherPassword,jdbcType=VARCHAR}, #{departmentId,jdbcType=INTEGER}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="pdsu.project.domain.TeacherInformation" >
+    update teacher_information
+    set teacher_name = #{teacherName,jdbcType=VARCHAR},
+      teacher_phone = #{teacherPhone,jdbcType=VARCHAR},
+      teacher_contact_phone = #{teacherContactPhone,jdbcType=VARCHAR},
+      teacher_permanent_address = #{teacherPermanentAddress,jdbcType=INTEGER},
+      teacher_detail_perAddress = #{teacherDetailPeraddress,jdbcType=VARCHAR},
+      teacher_contact_name = #{teacherContactName,jdbcType=VARCHAR},
+      teacher_sex = #{teacherSex,jdbcType=INTEGER},
+      teacher_password = #{teacherPassword,jdbcType=VARCHAR},
+      department_id = #{departmentId,jdbcType=INTEGER}
+    where teacher_number = #{teacherNumber,jdbcType=VARCHAR}
+  </update>
+
+  <!--根据账号密码查询老师信息-->
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap"  >
+    select  *
+    from teacher_information
+    where teacher_number = #{teacherNum}  and  teacher_password=#{password}
+  </select>
+
+  <!--查询所有的老师信息-->
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select  *
+    from teacher_information  order by id asc
+  </select>
+  <select id="selectByTeacherNum" resultMap="BaseResultMap">
+     select  *
+    from teacher_information
+    where teacher_number = #{teacherNum}
+  </select>
+  <select id="selecrByDepartId" resultType="java.lang.String">
+     select  department_name  from  department_information
+     where department_id=#{dept}
+
+
+  </select>
+  <select id="selectById" resultMap="BaseResultMap">
+      select  *
+    from teacher_information
+    where id = #{id}
+
+  </select>
+  <select id="SelectTelphoneByTeacherNum" resultType="java.lang.String">
+
+    select teacher_phone
+     from teacher_information
+    where teacher_number = #{teacherNum}
+  </select>
+  <select id="selectAllTeacherNumByDeptId"  resultType="java.lang.String">
+     select  teacher_number
+       from teacher_information
+     where department_id=#{dept}
+
+  </select>
+  <select id="selectAllTeacherNum" resultType="java.lang.String">
+     select  teacher_number
+       from teacher_information
+  </select>
+  <select id="selecrByGradeId" resultType="java.lang.String">
+select  grade_name
+       from grade_information  where  id=#{gradeId}
+
+
+  </select>
+
+  <select id="selectAllByPag" resultType="pdsu.project.domain.TeacherInformation">
+
+     select  *
+    from teacher_information  order by id asc   limit #{page},#{pageSize}
+
+  </select>
+    <select id="count" resultType="java.lang.Integer">
+
+       select  count(*) from  teacher_information
+
+    </select>
+
+</mapper>
